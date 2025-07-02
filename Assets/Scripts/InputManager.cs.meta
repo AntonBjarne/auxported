@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 49ffff5acf39e2f44a61aff203d28f6c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hitScorePrefab: {fileID: 5651188270848985409, guid: 9e47f25eff5704b478fe09bc32a6b9ab, type: 3}
+  - hitScoreSpawnPoint: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
