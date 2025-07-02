@@ -1,0 +1,11 @@
+{
+  "songName": "MyCoolTrack",
+  "bpm": 120,
+  "offset": 1.2,
+  "notes": [
+    { "type": "Left", "time": 0.5 },
+    { "type": "Middle", "time": 1.0 },
+    { "type": "Right", "time": 1.5 },
+    { "type": "Special", "time": 2.0 }
+  ]
+}

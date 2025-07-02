@@ -22,5 +22,11 @@ public class BeatManager : MonoBehaviour
         SongPosition = (float)(AudioSettings.dspTime - songStartDspTime);
     }
 
+    public void SetBpm(float newBpm)
+    {
+        bpm = newBpm;
+        secondsPerBeat = 60f / bpm;
+    }
+
     public float GetBeatTime() => SongPosition / secondsPerBeat;
 }
