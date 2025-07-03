@@ -1,32 +1,55 @@
+﻿using System.IO;
 using UnityEngine;
 
 public class MapLoader : MonoBehaviour
 {
-    public BeatManager beatManager;  // Assign this in Inspector!
-
-    public AudioClip songClip;
-    public float bpm;
-    public float offset;
+    public string mapFileName = "map1.json"; // Name of the JSON file in StreamingAssets
+    public AudioSource musicSource;          // 🎵 Drag your AudioSource here in the inspector
 
     void Start()
     {
-        if (beatManager == null)
+        LoadMap(mapFileName);
+    }
+
+    public void LoadMap(string mapName)
+    {
+        // Path to JSON file
+        string filePath = Path.Combine(Application.streamingAssetsPath, mapName);
+
+        if (!File.Exists(filePath))
         {
-            Debug.LogError("BeatManager reference is missing in MapLoader!");
+            Debug.LogError($"Map file not found at {filePath}");
             return;
         }
 
-        beatManager.SetBpm(bpm);
+        // Load JSON text
+        string json = File.ReadAllText(filePath);
+        MapData map = JsonUtility.FromJson<MapData>(json);
 
-        // Assuming you want to assign the song clip to the BeatManager's AudioSource:
-        if (beatManager.musicSource != null)
+        Debug.Log($"Loaded map: {map.songName}, BPM: {map.bpm}, Notes: {map.notes.Count}");
+
+        // Load audio file from Resources/Music/
+        AudioClip clip = Resources.Load<AudioClip>("Music/" + Path.GetFileNameWithoutExtension(map.songFile));
+
+        if (clip != null)
         {
-            beatManager.musicSource.clip = songClip;
-            beatManager.musicSource.PlayDelayed(offset);
+            musicSource.clip = clip;
+            musicSource.Play();
         }
         else
         {
-            Debug.LogError("BeatManager's AudioSource is missing!");
+            Debug.LogWarning($"Could not find audio file: {map.songFile} in Resources/Music/");
+        }
+
+        // Set BPM and offset
+        BeatManager.Instance.SetBpm(map.bpm);
+        BeatManager.Instance.SetOffset(map.offset);
+
+        // Pass notes to NoteSpawner
+        NoteSpawner.Instance.notesToSpawn.Clear();
+        foreach (var note in map.notes)
+        {
+            NoteSpawner.Instance.notesToSpawn.Add((note.type, note.time));
         }
     }
 }
