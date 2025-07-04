@@ -1,35 +1,29 @@
-﻿using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
+using static SongListManager;
 
 public class MapLoader : MonoBehaviour
 {
-    public string mapFileName = "map1.json"; // Name of the JSON file in StreamingAssets
-    public AudioSource musicSource;          // 🎵 Drag your AudioSource here in the inspector
+    public AudioSource musicSource; // Assign in inspector
 
     void Start()
     {
-        LoadMap(mapFileName);
-    }
+        MapData map = SelectedMapDataHolder.SelectedMap;
 
-    public void LoadMap(string mapName)
-    {
-        // Path to JSON file
-        string filePath = Path.Combine(Application.streamingAssetsPath, mapName);
-
-        if (!File.Exists(filePath))
+        if (map == null)
         {
-            Debug.LogError($"Map file not found at {filePath}");
+            Debug.LogError("No map selected! Did you come from the start scene?");
             return;
         }
 
-        // Load JSON text
-        string json = File.ReadAllText(filePath);
-        MapData map = JsonUtility.FromJson<MapData>(json);
+        LoadMap(map);
+    }
 
+    public void LoadMap(MapData map)
+    {
         Debug.Log($"Loaded map: {map.songName}, BPM: {map.bpm}, Notes: {map.notes.Count}");
 
-        // Load audio file from Resources/Music/
-        AudioClip clip = Resources.Load<AudioClip>("Music/" + Path.GetFileNameWithoutExtension(map.songFile));
+        // Load audio file from Resources/Music/ folder
+        AudioClip clip = Resources.Load<AudioClip>("Music/" + System.IO.Path.GetFileNameWithoutExtension(map.songFile));
 
         if (clip != null)
         {
@@ -41,7 +35,7 @@ public class MapLoader : MonoBehaviour
             Debug.LogWarning($"Could not find audio file: {map.songFile} in Resources/Music/");
         }
 
-        // Set BPM and offset
+        // Set BPM and offset (make sure BeatManager is ready and has these methods)
         BeatManager.Instance.SetBpm(map.bpm);
         BeatManager.Instance.SetOffset(map.offset);
 
