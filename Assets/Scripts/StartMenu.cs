@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using TMPro;
 
 public class StartMenu : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class StartMenu : MonoBehaviour
     {
         startPanel.SetActive(true);
         songSelectionPanel.SetActive(false);
+
     }
 
     public void OnStartButton() //byt panel
@@ -44,16 +46,23 @@ public class StartMenu : MonoBehaviour
     void PopulateSongList()
     {
         TextAsset[] mapFiles = Resources.LoadAll<TextAsset>("Maps");
+        Debug.Log($"Found {mapFiles.Length} map files");
 
         foreach (TextAsset mapFile in mapFiles)
         {
-            string mapName = mapFile.name;
+            MapData mapData = JsonUtility.FromJson<MapData>(mapFile.text);
+            Debug.Log($"Loaded song name: {mapData.SongName}");
 
             GameObject buttonObj = Instantiate(songButtonPrefab, songListParent);
 
-            buttonObj.GetComponentInChildren<Text>().text = mapName;
+            // Use TextMeshProUGUI instead of Text
+            var tmpText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (tmpText != null)
+                tmpText.text = mapData.SongName;
+            else
+                Debug.LogWarning("No TextMeshProUGUI component found in button prefab!");
 
-            buttonObj.GetComponent<Button>().onClick.AddListener(() => OnSongSelected(mapName));
+            buttonObj.GetComponent<Button>().onClick.AddListener(() => OnSongSelected(mapFile.name));
         }
     }
 

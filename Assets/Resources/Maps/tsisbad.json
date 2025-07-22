@@ -1,0 +1,12 @@
+{
+  "SongName": "Tsisbad",
+  "SongFile": "tsisbad",
+  "Bpm": 130,
+  "Offset": 0,
+  "Notes": [
+    { "Time": 0.5, "Type": "NoteL" },
+    { "Time": 1, "Type": "NoteM" },
+    { "Time": 1.5, "Type": "NoteR" },
+    { "Time": 2, "Type": "NoteS" }
+  ]
+}
