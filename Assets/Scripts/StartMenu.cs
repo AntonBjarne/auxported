@@ -7,7 +7,7 @@ using TMPro;
 
 public class StartMenu : MonoBehaviour
 {
-    public GameObject startPanel;
+    public GameObject startPanel; //JAG VAR INLOGGAD PÅ FEL SKIT MEN NU KANSKE DET GÅR ATT PUSHA IGENERGNADBJADFGADFGBJNIADFGBJIGABJIGABJIKAFGBJIKADFG
     public GameObject songSelectionPanel; // fäst dessa i inspector
     public Transform songListParent;
     public GameObject songButtonPrefab;
